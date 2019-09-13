@@ -490,7 +490,7 @@ class ModelBuilder(ModelBuilderBase):
                         self.out.var(n).setRange(self.out.function('%s_BoundLo' % n), self.out.function('%s_BoundHi' % n))
                 globalobs.append("%s_In" % n)
                 #if self.options.optimizeBoundNuisances: self.out.var(n).setAttribute("optimizeBounds")
-	    elif pdf == "extArg" : continue
+            elif pdf == "extArg" : continue
 
             else: raise RuntimeError("Unsupported pdf %s" % pdf)
             if nofloat:
@@ -502,7 +502,7 @@ class ModelBuilder(ModelBuilderBase):
             nuisPdfs = ROOT.RooArgList()
             nuisVars = ROOT.RooArgSet()
             for (n,nf,p,a,e) in self.DC.systs:
-		if p!= "constr": nuisVars.add(self.out.var(n))
+                if p!= "constr": nuisVars.add(self.out.var(n))
                 nuisPdfs.add(self.out.pdf(n+"_Pdf"))
             self.out.defineSet("nuisances", nuisVars)
             self.out.nuisPdf = ROOT.RooProdPdf("nuisancePdf", "nuisancePdf", nuisPdfs)
@@ -633,8 +633,8 @@ class ModelBuilder(ModelBuilderBase):
                     for kappa, thetaName in logNorms: procNorm.addLogNormal(kappa, self.out.function(thetaName))
                     for kappaLo, kappaHi, thetaName in alogNorms: procNorm.addAsymmLogNormal(kappaLo, kappaHi, self.out.function(thetaName))
                     for factorName in factors:
-		    	if self.out.function(factorName): procNorm.addOtherFactor(self.out.function(factorName))
-			else: procNorm.addOtherFactor(self.out.var(factorName))
+                        if self.out.function(factorName): procNorm.addOtherFactor(self.out.function(factorName))
+                        else: procNorm.addOtherFactor(self.out.var(factorName))
                     self.out._import(procNorm)
     def doIndividualModels(self):
         """create pdf_bin<X> and pdf_bin<X>_bonly for each bin"""

@@ -118,7 +118,7 @@ class StageZero(STXSBaseModel):
         print("SignalStrengths:: declaring %s as %s" % (vname,x))
     def doParametersOfInterest(self):
         """Create POI out of signal strengths (and MH)"""
-	pois = []
+        pois = []
 
         allProds = []
         for regproc in ALL_STXS_PROCS["Stage0"].keys():

@@ -735,7 +735,7 @@ class RatioBRSMHiggs(SMLikeHiggsModel):
         SMLikeHiggsModel.__init__(self)  
         self.floatMass = False        
         self.modes = SM_HIGG_DECAYS  #set( ("hbb", "htt", "hgg", "hzz", "hww") ) 
-	self.denominator = "hww" 
+        self.denominator = "hww" 
 
     def setPhysicsOptions(self,physOptions): 
         for po in physOptions: 

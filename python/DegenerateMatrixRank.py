@@ -53,18 +53,18 @@ class AllMuiLambdaHiggs(SMLikeHiggsModel):
                         self.modelBuilder.doSet("POI", ",".join(poi) )
                         #self.modelBuilder.doSet('POI','poi,MH')
                 else:
-                     	print('MH will be assumed to be', self.options.mass)
+                        print('MH will be assumed to be', self.options.mass)
                         self.modelBuilder.out.var("MH").removeRange()
                         self.modelBuilder.out.var("MH").setVal(self.options.mass)
         else:
-             	if len(self.mHRange):
+                if len(self.mHRange):
                         print('MH will be left floating within', self.mHRange[0], 'and', self.mHRange[1])
                         self.modelBuilder.doVar("MH[%s,%s]" % (self.mHRange[0],self.mHRange[1]))
                         poi.append('MH');
                         self.modelBuilder.doSet("POI", ",".join(poi) )
                         #self.modelBuilder.doSet('POI','poi,MH')
                 else:
-                     	print('MH (not there before) will be assumed to be', self.options.mass)
+                        print('MH (not there before) will be assumed to be', self.options.mass)
                         self.modelBuilder.doVar("MH[%g]" % self.options.mass)
         for item in poi:
            print(item)
@@ -143,7 +143,7 @@ class AllMuiLambdasHiggs(SMLikeHiggsModel):
                         self.modelBuilder.doSet("POI", ",".join(poi) )
                         #self.modelBuilder.doSet('POI','poi,MH')
                 else:
-                     	print('MH will be assumed to be', self.options.mass)
+                        print('MH will be assumed to be', self.options.mass)
                         self.modelBuilder.out.var("MH").removeRange()
                         self.modelBuilder.out.var("MH").setVal(self.options.mass)
         else:
@@ -175,7 +175,7 @@ class AllMuiLambdasHiggs(SMLikeHiggsModel):
         elif production == "VH" or production=="ZH" or production=="WH":
                 return 'lambdav_'+decay+'mu_'+decay
         elif production == "ttH":
-                return 'lambdat_'+decay+'mu_'+decay	
+                return 'lambdat_'+decay+'mu_'+decay
         else: raise RuntimeError("Unknown production mode '%s'" %production)
 
 allmuilambda= AllMuiLambdaHiggs()
