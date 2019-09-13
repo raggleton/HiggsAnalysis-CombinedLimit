@@ -145,7 +145,7 @@ class SMHiggsBuilder:
                 rooExpr = 'expr::%(scalingName)s'%locals()+'( "( (@0*@0)*(%g)  + (@1*@1)*(%g) + (@0*@1)*(%g) )/%g"'%tuple((coeffs[sqrts] + [sum(coeffs[sqrts])] ))+', %(Ctop)s, %(CW)s,)'%locals()
                 self.modelBuilder.factory_(rooExpr)
         else:
-            raise RuntimeError, "There is no scaling defined for %(what)s" % locals()
+            raise RuntimeError("There is no scaling defined for %(what)s" % locals())
 
                 
     def makePartialWidthUncertainties(self):
@@ -192,7 +192,7 @@ class SMHiggsBuilder:
     def dump(self,name,xvar,values,logfile):
         xv = self.modelBuilder.out.var(xvar)
         yf = self.modelBuilder.out.function(name)
-        if yf == None: raise RuntimeError, "Missing "+name
+        if yf == None: raise RuntimeError("Missing "+name)
         log = open(logfile, "w")
         for x in values:
             xv.setVal(x)

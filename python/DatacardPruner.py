@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import re
 import glob
@@ -246,7 +247,7 @@ class DatacardPruner(object) :
             if not name in UNCERTS :
                 confused += 1
                 missmatch = True
-                print "Warning: uncertainty:", name,  " found in output file of maximum likelihood fit but NOT in list of uncertainties as defined by datacards."
+                print("Warning: uncertainty:", name,  " found in output file of maximum likelihood fit but NOT in list of uncertainties as defined by datacards.")
             pulls = pull_pattern.findall(line)
             if pulls :
                 val = 0.
@@ -330,7 +331,7 @@ class DatacardPruner(object) :
                         excl+=1
                         line = line.lstrip('#')
                     else :
-                        print "Warning: MANIPULATION:", MANIPULATION, "unknown. Possible values are: COMMENT, UNCOMMENT."
+                        print("Warning: MANIPULATION:", MANIPULATION, "unknown. Possible values are: COMMENT, UNCOMMENT.")
             output.write(line)
         file.close()
         output.close()
