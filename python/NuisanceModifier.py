@@ -124,19 +124,19 @@ def doRenameNuisance(datacard, args):
       for lsyst,nofloat,pdf0,args0,errline0 in (datacard.systs[:]):
         i+=1
         if lsyst == oldname : # found the nuisance
-	  nuisanceID = i
-	  if pdf0 != "param": 
-            raise RuntimeError, "Missing arguments: the syntax is: nuisance edit rename process channel oldname newname"	  
+          nuisanceID = i
+          if pdf0 != "param": 
+            raise RuntimeError, "Missing arguments: the syntax is: nuisance edit rename process channel oldname newname"
           for lsyst2,nofloat2,pdf02,args02,errline02 in (datacard.systs[:]):
-	    if lsyst2 == newname:
-	     if pdf02 != "param":
-	      if (args0[0]) not in ["0.0","0.","0"] or (args0[1]) not in ["1.0","1.","1"] : raise RuntimeError, "Can't rename nuisance %s with Gaussian pdf G(%s,%s) to name %s which already exists with G(0,1) constraint!" % (lsyst,args0[0],args0[1],lsyst2)
+            if lsyst2 == newname:
+             if pdf02 != "param":
+              if (args0[0]) not in ["0.0","0.","0"] or (args0[1]) not in ["1.0","1.","1"] : raise RuntimeError, "Can't rename nuisance %s with Gaussian pdf G(%s,%s) to name %s which already exists with G(0,1) constraint!" % (lsyst,args0[0],args0[1],lsyst2)
              else: 
-	      if (args0[0])!=(args02[0])  or float(args0[1])!=float(args02[1]) : raise RuntimeError, "Can't rename nuisance %s with Gaussian pdf G(%s,%s) to name %s which already exists with Gaussian pdf G(%s,%s) constraint!" % (lsyst,args0[0],args0[1],lsyst2,args02[0],args02[1])
-	  break
+              if (args0[0])!=(args02[0])  or float(args0[1])!=float(args02[1]) : raise RuntimeError, "Can't rename nuisance %s with Gaussian pdf G(%s,%s) to name %s which already exists with Gaussian pdf G(%s,%s) constraint!" % (lsyst,args0[0],args0[1],lsyst2,args02[0],args02[1])
+          break
       if nuisanceID: 
-      	datacard.systs[nuisanceID][0]=newname 
-	datacard.systematicsParamMap[newname]=oldname
+        datacard.systs[nuisanceID][0]=newname
+        datacard.systematicsParamMap[newname]=oldname
       else: raise RuntimeError, "No nuisance parameter found with name %s"%oldname 
       return
 
@@ -171,7 +171,7 @@ def doRenameNuisance(datacard, args):
                             foundProc = True
                             if errline0[b][p] in [0.0]:
                                 continue
-    			    if "shape" in pdf0 : datacard.systematicsShapeMap[newname,b,p]=oldname
+                                if "shape" in pdf0 : datacard.systematicsShapeMap[newname,b,p]=oldname
                             if p in errline0[b] and errline2[b][p] not in [ 0.0, 1.0 ]:
                                 if "addq" in opts:
                                     errline2[b][p] = quadratureAdd(pdf0, errline0[b][p], errline2[b][p], context="nuisance edit rename, args = %s" % args)

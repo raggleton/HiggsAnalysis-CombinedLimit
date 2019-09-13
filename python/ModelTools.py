@@ -24,7 +24,7 @@ class ModelBuilderBase():
     def __init__(self,options):
         self.options = options
         self.out = stdout
-	self.discrete_param_set = []
+        self.discrete_param_set = []
         if options.bin:
             if options.out == None: options.out = re.sub(".txt$","",options.fileName)+".root"
             options.baseDir = os.path.dirname(options.fileName)
@@ -92,7 +92,7 @@ class ModelBuilderBase():
         if self.options.bin: return self.factory_("%s::%s(%s)" % (type, name, X));
         else: self.out.write("%s = %s(%s);\n" % (name, type, X))
     def addDiscrete(self,var):
-	self.discrete_param_set.append(var)
+        self.discrete_param_set.append(var)
 
 class ModelBuilder(ModelBuilderBase):
     """This class defines the actual methods to build a model"""
@@ -118,13 +118,13 @@ class ModelBuilder(ModelBuilderBase):
             poi = poiIter.Next()
         self.physics.preProcessNuisances(self.DC.systs)
         self.doNuisances()
-	self.doExtArgs()
-	self.doRateParams()
+        self.doExtArgs()
+        self.doRateParams()
         self.doExpectedEvents()
         self.doIndividualModels()
         self.doNuisancesGroups() # this needs to be called after both doNuisances and doIndividualModels
         self.doCombination()
-	self.runPostProcesses()
+        self.runPostProcesses()
         self.physics.done()
         if self.options.bin:
             self.doModelConfigs()
@@ -139,124 +139,124 @@ class ModelBuilder(ModelBuilderBase):
          self.out.arg(n).setConstant(True)
 
     def doExtArgs(self):
-	open_files = {};
-	for rp in self.DC.extArgs.keys():
-	  if self.out.arg(rp): continue
-	  argv = self.DC.extArgs[rp][-1]
-	  if ":" in argv:
-	    split = argv.split(":")
-            importargs = []
-            if "RecycleConflictNodes" in split:
-                split.remove("RecycleConflictNodes")
-                importargs.append(ROOT.RooFit.RecycleConflictNodes())
-            fin, wsn = split
-	    if (fin,wsn) in open_files:
-		  wstmp = open_files[(fin,wsn)]
-		  if not wstmp.arg(rp):
-		   raise RuntimeError, "No parameter '%s' found for extArg in workspace %s from file %s"%(rp,wsn,fin)
-		  self.out._import(wstmp.arg(rp), *importargs)
-	    else:
-	      try:
-		fitmp = ROOT.TFile.Open(fin)
-		wstmp = fitmp.Get(wsn)
-		if not wstmp.arg(rp):
-		 raise RuntimeError, "No parameter '%s' found for extArg in workspace %s from file %s"%(rp,wsn,fin)
-		self.out._import(wstmp.arg(rp), *importargs)
-		open_files[(fin,wsn)] = wstmp
-	      except:
-		raise RuntimeError, "No File '%s' found for extArg, or workspace '%s' not in file "%(fin,wsn)
-	  else:
-	      param_range = ""
-	      param_val   = self.DC.extArgs[rp][-1]
-	      if len(self.DC.extArgs[rp])>3: # range is included:
-	        param_range = self.DC.extArgs[rp][-1]
-	        param_val   = self.DC.extArgs[rp][-2]
-	    	if "[" not in param_range:
-			  raise RuntimeError, "Expected range arguments [min,max] or [const] for extArg %s "%(rp)
-	  	param_range = param_range.strip('[]')
+        open_files = {};
+        for rp in self.DC.extArgs.keys():
+            if self.out.arg(rp): continue
+            argv = self.DC.extArgs[rp][-1]
+            if ":" in argv:
+                split = argv.split(":")
+                importargs = []
+                if "RecycleConflictNodes" in split:
+                    split.remove("RecycleConflictNodes")
+                    importargs.append(ROOT.RooFit.RecycleConflictNodes())
+                fin, wsn = split
+                if (fin,wsn) in open_files:
+                    wstmp = open_files[(fin,wsn)]
+                    if not wstmp.arg(rp):
+                        raise RuntimeError, "No parameter '%s' found for extArg in workspace %s from file %s"%(rp,wsn,fin)
+                    self.out._import(wstmp.arg(rp), *importargs)
+                else:
+                    try:
+                        fitmp = ROOT.TFile.Open(fin)
+                        wstmp = fitmp.Get(wsn)
+                        if not wstmp.arg(rp):
+                            raise RuntimeError, "No parameter '%s' found for extArg in workspace %s from file %s"%(rp,wsn,fin)
+                        self.out._import(wstmp.arg(rp), *importargs)
+                        open_files[(fin,wsn)] = wstmp
+                    except:
+                        raise RuntimeError, "No File '%s' found for extArg, or workspace '%s' not in file "%(fin,wsn)
+            else:
+                param_range = ""
+                param_val   = self.DC.extArgs[rp][-1]
+                if len(self.DC.extArgs[rp])>3: # range is included:
+                    param_range = self.DC.extArgs[rp][-1]
+                    param_val   = self.DC.extArgs[rp][-2]
+                    if "[" not in param_range:
+                        raise RuntimeError, "Expected range arguments [min,max] or [const] for extArg %s "%(rp)
+                    param_range = param_range.strip('[]')
 
-	      removeRange = False
-	      setConst= (param_range== "const")
-	      if param_range in ["", "const"]:
-	        param_range = "0,1"
-		removeRange=True
+                removeRange = False
+                setConst= (param_range== "const")
+                if param_range in ["", "const"]:
+                    param_range = "0,1"
+                    removeRange=True
 
-	      self.doVar("%s[%s,%s]"%(rp,float(param_val),param_range))
-	      if removeRange: self.out.var(rp).removeRange()
-	      self.out.var(rp).setConstant(False)
-	      if setConst: self.out.var(rp).setConstant(True)
-	      self.out.var(rp).setAttribute("flatParam")
+                self.doVar("%s[%s,%s]"%(rp,float(param_val),param_range))
+                if removeRange: self.out.var(rp).removeRange()
+                self.out.var(rp).setConstant(False)
+                if setConst: self.out.var(rp).setConstant(True)
+                self.out.var(rp).setAttribute("flatParam")
 
     def doRateParams(self):
 
-    	# First support external functions/parameters
-	# keep a map of open files/workspaces
-	open_files = {};
+        # First support external functions/parameters
+        # keep a map of open files/workspaces
+        open_files = {};
 
-	for rp in self.DC.rateParams.keys():
-	 for rk in range(len(self.DC.rateParams[rp])):
-	  type = self.DC.rateParams[rp][rk][0][-1]
-	  if type!=2: continue
-	  argu,argv = self.DC.rateParams[rp][rk][0][0],self.DC.rateParams[rp][rk][0][1]
-	  if self.out.arg(argu): continue
-	  fin,wsn = argv.split(":")
-	  if (fin,wsn) in open_files:
-	        wstmp = open_files[(fin,wsn)]
-	        if not wstmp.arg(argu):
-	         raise RuntimeError, "No parameter '%s' found for rateParam in workspace %s from file %s"%(argu,wsn,fin)
-	        self.out._import(wstmp.arg(argu),ROOT.RooFit.RecycleConflictNodes())
-	  else:
-	    try:
-	      fitmp = ROOT.TFile.Open(fin)
-	      wstmp = fitmp.Get(wsn)
-	      if not wstmp.arg(argu):
-	       raise RuntimeError, "No parameter '%s' found for rateParam in workspace %s from file %s"%(argu,wsn,fin)
-	      self.out._import(wstmp.arg(argu),ROOT.RooFit.RecycleConflictNodes())
-	      open_files[(fin,wsn)] = wstmp
-	      #fitmp.Close()
-	    except:
-	      raise RuntimeError, "No File '%s' found for rateParam, or workspace '%s' not in file "%(fin,wsn)
+        for rp in self.DC.rateParams.keys():
+            for rk in range(len(self.DC.rateParams[rp])):
+                type = self.DC.rateParams[rp][rk][0][-1]
+                if type!=2: continue
+                argu,argv = self.DC.rateParams[rp][rk][0][0],self.DC.rateParams[rp][rk][0][1]
+                if self.out.arg(argu): continue
+                fin,wsn = argv.split(":")
+                if (fin,wsn) in open_files:
+                    wstmp = open_files[(fin,wsn)]
+                    if not wstmp.arg(argu):
+                        raise RuntimeError, "No parameter '%s' found for rateParam in workspace %s from file %s"%(argu,wsn,fin)
+                    self.out._import(wstmp.arg(argu),ROOT.RooFit.RecycleConflictNodes())
+                else:
+                    try:
+                        fitmp = ROOT.TFile.Open(fin)
+                        wstmp = fitmp.Get(wsn)
+                        if not wstmp.arg(argu):
+                            raise RuntimeError, "No parameter '%s' found for rateParam in workspace %s from file %s"%(argu,wsn,fin)
+                        self.out._import(wstmp.arg(argu),ROOT.RooFit.RecycleConflictNodes())
+                        open_files[(fin,wsn)] = wstmp
+                      #fitmp.Close()
+                    except:
+                        raise RuntimeError, "No File '%s' found for rateParam, or workspace '%s' not in file "%(fin,wsn)
 
-	# First do independant parameters, then expressions
-	for rp in self.DC.rateParams.keys():
-	 for rk in range(len(self.DC.rateParams[rp])):
-	  type = self.DC.rateParams[rp][rk][0][-1]
-	  if type!=0: continue
-	  param_range = (self.DC.rateParams[rp][rk][1]).strip('[]')
-	  argu,argv = self.DC.rateParams[rp][rk][0][0],self.DC.rateParams[rp][rk][0][1]
-	  if self.out.arg(argu): continue
+        # First do independant parameters, then expressions
+        for rp in self.DC.rateParams.keys():
+         for rk in range(len(self.DC.rateParams[rp])):
+          type = self.DC.rateParams[rp][rk][0][-1]
+          if type!=0: continue
+          param_range = (self.DC.rateParams[rp][rk][1]).strip('[]')
+          argu,argv = self.DC.rateParams[rp][rk][0][0],self.DC.rateParams[rp][rk][0][1]
+          if self.out.arg(argu): continue
 
-	  removeRange = (len(param_range)==0)
-	  if param_range == "": param_range = "0,1"
-	  self.doVar("%s[%s,%s]"%(argu,argv,param_range))
-	  if removeRange: self.out.var(argu).removeRange()
-	  self.out.var(argu).setConstant(False)
-	  self.out.var(argu).setAttribute("flatParam")
+          removeRange = (len(param_range)==0)
+          if param_range == "": param_range = "0,1"
+          self.doVar("%s[%s,%s]"%(argu,argv,param_range))
+          if removeRange: self.out.var(argu).removeRange()
+          self.out.var(argu).setConstant(False)
+          self.out.var(argu).setAttribute("flatParam")
 
-	# functions are tricky (functions of functions?)
-	toBeCreated = []
-	for rp in self.DC.rateParams.keys():
-	 for rk in range(len(self.DC.rateParams[rp])):
-	  type = self.DC.rateParams[rp][rk][0][-1]
-	  if type!=1: continue
-	  argu,arge,argv = self.DC.rateParams[rp][rk][0][0],self.DC.rateParams[rp][rk][0][1],self.DC.rateParams[rp][rk][0][2]
-	  if self.out.arg(argu): continue
-	  if not reduce(lambda x,y:x*y,[self.out.arg(a)!=None for a in argv.split(",")],1): toBeCreated.append([argu,arge,argv]) 
-	  else: self.doExp(argu,arge,argv)
+        # functions are tricky (functions of functions?)
+        toBeCreated = []
+        for rp in self.DC.rateParams.keys():
+         for rk in range(len(self.DC.rateParams[rp])):
+          type = self.DC.rateParams[rp][rk][0][-1]
+          if type!=1: continue
+          argu,arge,argv = self.DC.rateParams[rp][rk][0][0],self.DC.rateParams[rp][rk][0][1],self.DC.rateParams[rp][rk][0][2]
+          if self.out.arg(argu): continue
+          if not reduce(lambda x,y:x*y,[self.out.arg(a)!=None for a in argv.split(",")],1): toBeCreated.append([argu,arge,argv]) 
+          else: self.doExp(argu,arge,argv)
 
-	# by now we 've probably picked up the majority of the, repeat through list until we get them all
-	tbc = toBeCreated[:]
-	while True:
-	  toBeCreated = tbc[:]
-	  if len(toBeCreated)==0: break
-	  for rp in toBeCreated: 
-	    argu,arge,argv = rp[0],rp[1],rp[2]
-	    if reduce(lambda x,y:x*y,[self.out.arg(a)!=None for a in argv.split(",")],1): 
-	    	self.doExp(argu,arge,argv)
-		tbc.remove([argu,arge,argv])
-	  if len(tbc)==len(toBeCreated): 
-	      print tbc, " -> ", toBeCreated
-	      raise RuntimeError, "Cannot produce following rateParams (dependent parameters not found!) %s"%(",".join([t[0] for t in toBeCreated]))
+        # by now we 've probably picked up the majority of the, repeat through list until we get them all
+        tbc = toBeCreated[:]
+        while True:
+            toBeCreated = tbc[:]
+            if len(toBeCreated)==0: break
+            for rp in toBeCreated: 
+                argu,arge,argv = rp[0],rp[1],rp[2]
+                if reduce(lambda x,y:x*y,[self.out.arg(a)!=None for a in argv.split(",")],1): 
+                    self.doExp(argu,arge,argv)
+                    tbc.remove([argu,arge,argv])
+            if len(tbc)==len(toBeCreated):
+                print tbc, " -> ", toBeCreated
+                raise RuntimeError, "Cannot produce following rateParams (dependent parameters not found!) %s"%(",".join([t[0] for t in toBeCreated]))
 
 
     def doObservables(self):
@@ -518,7 +518,7 @@ class ModelBuilder(ModelBuilderBase):
         # Prepare a dictionary of which group a certain nuisance belongs to
         groupsFor = {}
         #existingNuisanceNames = tuple(set([syst[0] for syst in self.DC.systs]+self.DC.flatParamNuisances.keys()+self.DC.rateParams.keys()+self.DC.extArgs.keys()+self.DC.discretes))
-	existingNuisanceNames  = self.DC.getAllVariables()
+        existingNuisanceNames  = self.DC.getAllVariables()
         for groupName,nuisanceNames in self.DC.groups.iteritems():
             for nuisanceName in nuisanceNames:
                 if nuisanceName not in existingNuisanceNames:
@@ -537,12 +537,12 @@ class ModelBuilder(ModelBuilderBase):
                 if self.options.verbose > 1:
                     print 'Nuisance "%(n)s" is assigned to the following nuisance groups: %(groupNames)s' % locals()
                 for groupName in groupNames:
-		    try:
-                     self.out.var(n).setAttribute('group_'+groupName,True)
-		    except:
-		     try:
-                      self.out.cat(n).setAttribute('group_'+groupName,True)
-		     except: raise RuntimeError, 'Nuisance group "%(groupName)s" refers to nuisance but it is not an independant parameter.' % locals()
+                    try:
+                        self.out.var(n).setAttribute('group_'+groupName,True)
+                    except:
+                        try:
+                            self.out.cat(n).setAttribute('group_'+groupName,True)
+                        except: raise RuntimeError, 'Nuisance group "%(groupName)s" refers to nuisance but it is not an independant parameter.' % locals()
 
 
         for groupName,nuisanceNames in self.DC.groups.iteritems():
@@ -578,12 +578,12 @@ class ModelBuilder(ModelBuilderBase):
                 else:
                     raise RuntimeError, "Physics model returned something which is neither a name, nor 0, nor 1."
 
-		# look for rate param for this bin
-		if "%sAND%s"%(b,p) in self.DC.rateParams.keys():
-		  for rk in range(len(self.DC.rateParams["%sAND%s"%(b,p)])):
-		    argu = self.DC.rateParams["%sAND%s"%(b,p)][rk][0][0]
-		    if self.out.arg(argu): factors.append(argu)
-		    else: raise RuntimeError, "No rate parameter found %s, are you sure you defined it correctly in the datacard?"%(argu)
+                # look for rate param for this bin
+                if "%sAND%s"%(b,p) in self.DC.rateParams.keys():
+                  for rk in range(len(self.DC.rateParams["%sAND%s"%(b,p)])):
+                    argu = self.DC.rateParams["%sAND%s"%(b,p)][rk][0][0]
+                    if self.out.arg(argu): factors.append(argu)
+                    else: raise RuntimeError, "No rate parameter found %s, are you sure you defined it correctly in the datacard?"%(argu)
                 selfNormRate = 1.0
                 for (n,nofloat,pdf,args,errline) in self.DC.systs:
                     if pdf == "param":continue

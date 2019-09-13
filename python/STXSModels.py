@@ -3,17 +3,17 @@ from HiggsAnalysis.CombinedLimit.SMHiggsBuilder import SMHiggsBuilder
 import fnmatch 
 
 ALL_STXS_PROCS = {
-	"Stage0": {
-	 "ggH*": 	  "ggH"
-	,"bbH*": 	  "ggH"
-	,"qqH*": 	  "qqH"
-	,"ttH*":    	  "ttH"
-	,"tH[Wq]*":    	  "ttH"
-	,"ggZH_lep*": 	  "QQ2HLL"
-	,"ZH_lep*": 	  "QQ2HLL"
-	,"WH_lep*": 	  "QQ2HLNU"
-	,"[VWZ]H_had*":   "VH2HQQ"
-	}
+        "Stage0": {
+         "ggH*":           "ggH"
+        ,"bbH*":           "ggH"
+        ,"qqH*":           "qqH"
+        ,"ttH*":           "ttH"
+        ,"tH[Wq]*":        "ttH"
+        ,"ggZH_lep*":      "QQ2HLL"
+        ,"ZH_lep*":        "QQ2HLL"
+        ,"WH_lep*":        "QQ2HLNU"
+        ,"[VWZ]H_had*":    "VH2HQQ"
+        }
 }
 
 CMS_to_LHCHCG_DecSimple = {
@@ -65,11 +65,11 @@ class STXSBaseModel(PhysicsModel):
         self.floatMass = False
         self.denominator=denominator
     def preProcessNuisances(self,nuisances):
-    	# add here any pre-processed nuisances such as constraint terms for the mass profiling?
-    	return 
+        # add here any pre-processed nuisances such as constraint terms for the mass profiling?
+        return 
     def setPhysicsOptions(self,physOptions):
         for po in physOptions:
-	    print po
+            print po
             if po.startswith("higgsMassRange="):
                 self.floatMass = True
                 self.mHRange = po.replace("higgsMassRange=","").split(",")
@@ -85,7 +85,7 @@ class STXSBaseModel(PhysicsModel):
                 self.modelBuilder.out.var("MH").setConstant(False)
             else:
                 self.modelBuilder.doVar("MH[%s,%s]" % (self.mHRange[0],self.mHRange[1]))
-	    self.POIs+=",MH"
+            self.POIs+=",MH"
         else:
             if self.modelBuilder.out.var("MH"): 
                 self.modelBuilder.out.var("MH").setVal(self.options.mass)
@@ -136,7 +136,7 @@ class StageZero(STXSBaseModel):
                         pois.append("mu_BR_%s_r_BR_%s"%(D,self.denominator))
 
         print pois
-	self.POIs=",".join(pois)
+        self.POIs=",".join(pois)
 
         self.doMH()
         print "Default parameters of interest: ", self.POIs
@@ -149,7 +149,7 @@ class StageZero(STXSBaseModel):
         for d in SM_HIGG_DECAYS + [ "hss" ]: 
             self.SMH.makeBR(d)
         allProds = []
-	for regproc in ALL_STXS_PROCS["Stage0"].keys():
+        for regproc in ALL_STXS_PROCS["Stage0"].keys():
             P = ALL_STXS_PROCS["Stage0"][regproc]
             if P in allProds: continue
             allProds.append(P)
@@ -169,8 +169,8 @@ class StageZero(STXSBaseModel):
                     self.modelBuilder.factory_('expr::scaling_'+P+'_'+D+'_13TeV("@0*@1",'+muXSBR+','+muBR+')')
 
     def getHiggsSignalYieldScale(self,production,decay,energy):
-	for regproc in ALL_STXS_PROCS["Stage0"].keys():
-	    if	fnmatch.fnmatch(production, regproc): 
+        for regproc in ALL_STXS_PROCS["Stage0"].keys():
+            if	fnmatch.fnmatch(production, regproc):
                 return "scaling_%s_%s_%s" % (ALL_STXS_PROCS["Stage0"][regproc],decay,energy)
 
         #raise RuntimeError, "No production process matching %s for Stage0 found !"%production

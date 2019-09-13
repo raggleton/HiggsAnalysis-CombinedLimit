@@ -201,7 +201,7 @@ class C7(SMLikeHiggsModel):
         self.modelBuilder.doVar("kbottom[1,0.0,3.0]")
         self.modelBuilder.doVar("kgluon[1,0.0,2.0]")
         self.modelBuilder.doVar("kgamma[1,0.0,2.5]")
-	self.modelBuilder.doVar("BRInvUndet[0,0,1]")
+        self.modelBuilder.doVar("BRInvUndet[0,0,1]")
         pois = 'kV,ktau,ktop,kbottom,kgluon,kgamma,BRInvUndet' 
         if self.doHZg:
             self.modelBuilder.doVar("kZgamma[1,0.0,30.0]")
@@ -315,14 +315,14 @@ class PartialWidthsModel(SMLikeHiggsModel):
     def setup(self):
         self.modelBuilder.doVar("PW_one[1]")
 
-	self.modelBuilder.factory_("prod::sr_WZ(r_WZ,r_WZ)")
-	self.modelBuilder.factory_("prod::sr_bZ(r_bZ,r_bZ)")
-	self.modelBuilder.factory_("prod::sr_tZ(r_tZ,r_tZ)")
-	self.modelBuilder.factory_("prod::sr_mZ(r_mZ,r_mZ)")
-	self.modelBuilder.factory_("prod::sr_gZ(r_gZ,r_gZ)")
-	self.modelBuilder.factory_("prod::sr_Zglu(r_Zglu,r_Zglu)")
-	self.modelBuilder.factory_("prod::sr_topglu(r_topglu,r_topglu)")
-	self.modelBuilder.factory_("prod::sc_gluZ(c_gluZ,c_gluZ)")
+        self.modelBuilder.factory_("prod::sr_WZ(r_WZ,r_WZ)")
+        self.modelBuilder.factory_("prod::sr_bZ(r_bZ,r_bZ)")
+        self.modelBuilder.factory_("prod::sr_tZ(r_tZ,r_tZ)")
+        self.modelBuilder.factory_("prod::sr_mZ(r_mZ,r_mZ)")
+        self.modelBuilder.factory_("prod::sr_gZ(r_gZ,r_gZ)")
+        self.modelBuilder.factory_("prod::sr_Zglu(r_Zglu,r_Zglu)")
+        self.modelBuilder.factory_("prod::sr_topglu(r_topglu,r_topglu)")
+        self.modelBuilder.factory_("prod::sc_gluZ(c_gluZ,c_gluZ)")
 
         self.modelBuilder.factory_("prod::PW_XSscal_WH(sr_Zglu,sr_WZ)")
         #self.modelBuilder.factory_("expr::PW_lambdaWZ(\"sqrt(@0)\",sr_WZ)")
@@ -337,10 +337,10 @@ class PartialWidthsModel(SMLikeHiggsModel):
             'htt' : 'sr_tZ',
             'hmm' : 'sr_mZ',
             'hgg' : 'sr_gZ',
-	    'hss' : 'sr_bZ',
-	    'hcc' : 'PW_one',   #
+            'hss' : 'sr_bZ',
+            'hcc' : 'PW_one',   #
             'hgluglu' : 'PW_one', #
-	    'hzg' : 'PW_one', #
+            'hzg' : 'PW_one', #
         }
         self.prodScales_ = {
             'ggH' : 'PW_one',

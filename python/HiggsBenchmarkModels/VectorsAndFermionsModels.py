@@ -367,13 +367,13 @@ class CvCfInvHiggs(SMLikeHiggsModel):
             return name
         
         BRscal = self.decayScaling[decay]
-	if production in self.productionScaling.keys(): # Simple scalings 
-        	XSscal = self.productionScaling[production]
-		self.modelBuilder.factory_('expr::%s("@0*@0 * @1", %s, CvCf_BRscal_%s)' % (name, XSscal, BRscal))
-	else: 
-		self.SMH.makeScaling(production, Cb='CF', Ctop='CF', Ctau='CF', CW='CV', CZ='CV')
-		XSscal = "Scaling_%s_%s"%(production,energy) 
-		self.modelBuilder.factory_('expr::%s("@0 * @1", %s, CvCf_BRscal_%s)' % (name, XSscal, BRscal))
+        if production in self.productionScaling.keys(): # Simple scalings 
+            XSscal = self.productionScaling[production]
+            self.modelBuilder.factory_('expr::%s("@0*@0 * @1", %s, CvCf_BRscal_%s)' % (name, XSscal, BRscal))
+        else: 
+            self.SMH.makeScaling(production, Cb='CF', Ctop='CF', Ctau='CF', CW='CV', CZ='CV')
+            XSscal = "Scaling_%s_%s"%(production,energy) 
+            self.modelBuilder.factory_('expr::%s("@0 * @1", %s, CvCf_BRscal_%s)' % (name, XSscal, BRscal))
 
         return name
 

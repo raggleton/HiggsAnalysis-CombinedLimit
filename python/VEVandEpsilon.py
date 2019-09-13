@@ -72,12 +72,12 @@ class MepsHiggs(SMLikeHiggsModel):
 
             if name in ('W','Z'):
 #                # Ellis cv == v (mv^(2 e)/M^(1 + 2 e))
-		 self.modelBuilder.factory_(
-                    	'expr::C%(name)s("@0 * TMath::Power(@3,2*@2) / TMath::Power(@1,1+2*@2)", SM_VEV, M, eps, M%(name)s_MSbar)' % locals() )
+                self.modelBuilder.factory_(
+                        'expr::C%(name)s("@0 * TMath::Power(@3,2*@2) / TMath::Power(@1,1+2*@2)", SM_VEV, M, eps, M%(name)s_MSbar)' % locals() )
             else:
 #                # Ellis cf == v (mf^e/M^(1 + e))
-		self.modelBuilder.factory_(
-			'expr::C%(name)s("@0 * TMath::Power(@3,@2) / TMath::Power(@1,1+@2)", SM_VEV, M, eps, M%(name)s_MSbar)' % locals() )
+                self.modelBuilder.factory_(
+                        'expr::C%(name)s("@0 * TMath::Power(@3,@2) / TMath::Power(@1,1+@2)", SM_VEV, M, eps, M%(name)s_MSbar)' % locals() )
 
         self.productionScaling = {
             'ttH':'Ctop',
