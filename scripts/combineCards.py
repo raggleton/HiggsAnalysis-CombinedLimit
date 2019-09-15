@@ -115,15 +115,15 @@ for ich,fname in enumerate(args):
             pdfargs = [ str(x) for x in pdfargs ]
             systlines[lsyst] = [pdf,pdfargs,systeffect,nofloat]
     # flat params
-    for K in DC.flatParamNuisances.iterkeys():
+    for K in iter(DC.flatParamNuisances.keys()):
         flatParamNuisances[K] = True
     for K in DC.extArgs.keys():
         extArgs[K] = DC.extArgs[K]
-    for K in DC.binParFlags.iterkeys():
+    for K in iter(DC.binParFlags.keys()):
         tbin = label if singlebin else label+K
         binParFlags[tbin] = DC.binParFlags[K]
     # rate params
-    for K in DC.rateParams.iterkeys():
+    for K in iter(DC.rateParams.keys()):
         tbin,tproc = K.split("AND")[0],K.split("AND")[1]
         b_in = tbin
         tbin = label if singlebin else label+tbin
@@ -255,22 +255,22 @@ for name in sysnamesSorted:
 for (pname, pargs) in paramSysts.items():
     print( "%-12s  param  %s" %  (pname, " ".join(pargs)))
 
-for pname in flatParamNuisances.iterkeys():
+for pname in iter(flatParamNuisances.keys()):
     print( "%-12s  flatParam" % pname)
-for pname in rateParams.iterkeys():
+for pname in iter(rateParams.keys()):
     for pk in range(len(rateParams[pname])):
      print( "%-12s  rateParam %s"% (rateParams[pname][pk][0][0],pname.replace("AND"," "))),
      for p in rateParams[pname][pk][0][1:-1]: print( p),
      print( rateParams[pname][pk][1]),
      print( "\n"),
-for dname in discreteNuisances.iterkeys():
+for dname in iter(discreteNuisances.keys()):
     print( "%-12s  discrete" % dname)
-for ext in extArgs.iterkeys():
+for ext in iter(extArgs.keys()):
     print( "%s" % ' '.join(extArgs[ext]))
 for groupName,nuisanceNames in groups.iteritems():
     nuisances = ' '.join(nuisanceNames)
     print( '%(groupName)s group = %(nuisances)s' % locals())
-for bpf in binParFlags.iterkeys():
+for bpf in iter(binParFlags.keys()):
     if len(binParFlags[bpf]) == 1:
       print( "%s autoMCStats %g" % (bpf,binParFlags[bpf][0]))
     if len(binParFlags[bpf]) == 2:
