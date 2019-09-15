@@ -169,7 +169,7 @@ for ich,fname in enumerate(args):
             if not isIncluded(b_in,options.channelIncludes): continue
             obsline += [FloatToString(DC.obs[b])];
     #get the groups - keep nuisances in a set so that they are never repetitions
-    for groupName,nuisanceNames in DC.groups.iteritems():
+    for groupName,nuisanceNames in DC.groups.items():
         if groupName in groups:
             groups[groupName].update(set(nuisanceNames))
         else:
@@ -267,7 +267,7 @@ for dname in iter(discreteNuisances.keys()):
     print( "%-12s  discrete" % dname)
 for ext in iter(extArgs.keys()):
     print( "%s" % ' '.join(extArgs[ext]))
-for groupName,nuisanceNames in groups.iteritems():
+for groupName,nuisanceNames in groups.items():
     nuisances = ' '.join(nuisanceNames)
     print( '%(groupName)s group = %(nuisances)s' % locals())
 for bpf in iter(binParFlags.keys()):
