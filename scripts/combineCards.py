@@ -251,7 +251,7 @@ print( hfmt % "rate",    "  ".join([cfmt % x for x in expline]))
 
 print( "-" * 130)
 
-sysnamesSorted = systlines.keys(); sysnamesSorted.sort()
+sysnamesSorted = systlines.keys(); sorted(sysnamesSorted) 
 for name in sysnamesSorted:
     (pdf,pdfargs,effect,nofloat) = systlines[name]
     if nofloat: name += "[nofloat]"
