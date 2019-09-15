@@ -84,7 +84,7 @@ for ich,fname in enumerate(args):
             b_in  = label if singlebin else b
             if isVetoed(b_in,options.channelVetos): continue
             if not isIncluded(b_in,options.channelIncludes): continue
-            if not systeffect.has_key(bout): systeffect[bout] = {}
+            if bout not in systeffect: systeffect[bout] = {}
             for p in DC.exp[b].keys(): # so that we get only self.DC.processes contributing to this bin
                 r = str(errline[b][p]);
                 if type(errline[b][p]) == list: r = "%s/%s" % (FloatToString(errline[b][p][0]), FloatToString(errline[b][p][1]))
@@ -92,7 +92,7 @@ for ich,fname in enumerate(args):
                 if errline[b][p] == 0: r = "-"
                 if len(r) > cmax: cmax = len(r) # get max col length, as it's more tricky to do it later with a map
                 systeffect[bout][p] = r
-        if systlines.has_key(lsyst):
+        if lsyst in systlines:
             (otherpdf, otherargs, othereffect, othernofloat) = systlines[lsyst]
             if otherpdf != pdf:
                 if (pdf == "lnN" and otherpdf.startswith("shape")):
@@ -134,7 +134,7 @@ for ich,fname in enumerate(args):
         rateParamsOrder.update(DC.rateParamsOrder)
     # discrete nuisance
     for K in DC.discretes:
-        if discreteNuisances.has_key(K): raise RuntimeError( "Cannot currently correlate discrete nuisances across categories. Rename %s in one."%K)
+        if K in discreteNuisances: raise RuntimeError( "Cannot currently correlate discrete nuisances across categories. Rename %s in one."%K)
         else: discreteNuisances[K] = True
     # put shapes, if available
     if len(DC.shapeMap):
@@ -143,14 +143,14 @@ for ich,fname in enumerate(args):
             b_in  = label if singlebin else b
             if isVetoed(b_in,options.channelVetos): continue
             if not isIncluded(b_in,options.channelIncludes): continue
-            p2sMap  = DC.shapeMap[b]   if DC.shapeMap.has_key(b)   else {}
-            p2sMapD = DC.shapeMap['*'] if DC.shapeMap.has_key('*') else {}
+            p2sMap  = DC.shapeMap[b]   if b in DC.shapeMap   else {}
+            p2sMapD = DC.shapeMap['*'] if '*' in DC.shapeMap else {}
             for p, x in p2sMap.items():
                 xrep = [xi.replace("$CHANNEL",b) for xi in x]
                 if xrep[0] != 'FAKE' and dirname != '': xrep[0] = dirname+"/"+xrep[0]
                 shapeLines.append((p,bout,xrep))
             for p, x in p2sMapD.items():
-                if p2sMap.has_key(p): continue
+                if p in p2sMap: continue
                 xrep = [xi.replace("$CHANNEL",b) for xi in x]
                 if xrep[0] != 'FAKE' and dirname != '': xrep[0] = dirname+"/"+xrep[0]
                 shapeLines.append((p,bout,xrep))
