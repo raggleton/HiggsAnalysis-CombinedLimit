@@ -2,6 +2,7 @@
 import re
 from sys import argv,exit
 import os.path
+import functools
 from pprint import pprint
 from optparse import OptionParser
 parser = OptionParser(
@@ -25,6 +26,15 @@ options.verbose = 0
 options.allowNoSignal = True
 options.allowNoBackground = True
 options.evaluateEdits = False
+
+def cmp(x, y):
+   if x == y:
+       return 0
+   elif x > y:
+       return 1
+   else:
+       return -1
+
 
 if options.nuisVetoFile:
     for line in open(options.nuisVetoFile,"r"):
@@ -206,7 +216,7 @@ print( "-" * 130)
 if shapeLines:
     chmax = max([max(len(p),len(c)) for p,c,x in shapeLines]);
     cfmt = "%-"+str(chmax)+"s ";
-    shapeLines.sort( key=lambda x,y : cmp(x[0],y[0]) if x[1] == y[1] else cmp(x[1],y[1]) )
+    shapeLines.sort( key = functools.cmp_to_key(lambda x,y : cmp(x[0],y[0]) if x[1] == y[1] else cmp(x[1],y[1]) ))
     for (process,channel,stuff) in shapeLines:
         print( "shapes", cfmt % process, cfmt % channel, ' '.join(stuff));
     print( "-" * 130)
