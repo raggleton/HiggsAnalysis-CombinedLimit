@@ -282,7 +282,7 @@ class ShapeBuilder(ModelBuilder):
         for ib,b in enumerate(self.DC.bins):
             databins = {}; bgbins = {}
             channelBinParFlag = b in self.DC.binParFlags.keys()
-            for p in [self.options.dataname]+self.DC.exp[b].keys():
+            for p in [self.options.dataname]+list(self.DC.exp[b].keys()):
                 if len(self.DC.obs) == 0 and p == self.options.dataname: continue
                 if p != self.options.dataname and self.DC.exp[b][p] == 0: continue
                 shape = self.getShape(b,p); norm = 0;
