@@ -41,7 +41,7 @@ nuisanceEdits = [];
 
 cmax = 5 # column width
 if not args:
-    raise RuntimeError, "No input datacards specified."
+    raise RuntimeError( "No input datacards specified.")
 for ich,fname in enumerate(args):
     label = "ch%d" % (ich+1)
     if "=" in fname: (label,fname) = fname.split("=")
@@ -75,7 +75,7 @@ for ich,fname in enumerate(args):
         systeffect = {}
         if pdf == "param":
             if paramSysts.has_key(lsyst):
-               if paramSysts[lsyst] != pdfargs: raise RuntimeError, "Parameter uncerainty %s mismatch between cards." % lsyst
+               if paramSysts[lsyst] != pdfargs: raise RuntimeError( "Parameter uncerainty %s mismatch between cards." % lsyst)
             else:
                 paramSysts[lsyst] = pdfargs
             continue
@@ -106,10 +106,10 @@ for ich,fname in enumerate(args):
                     systlines[lsyst][0] = pdf.replace("?","")+"?"
                     for b,v in systeffect.items(): othereffect[b] = v;
                 else:
-                    raise RuntimeError, "File %s defines systematic %s as using pdf %s, while a previous file defines it as using %s" % (fname,lsyst,pdf,otherpdf)
+                    raise RuntimeError( "File %s defines systematic %s as using pdf %s, while a previous file defines it as using %s" % (fname,lsyst,pdf,otherpdf))
             else:
                 if pdf == "gmN" and int(pdfargs[0]) != int(otherargs[0]):
-                    raise RuntimeError, "File %s defines systematic %s as using gamma with %s events in sideband, while a previous file has %s" % (fname,lsyst,pdfargs[0],otherargs[0])
+                    raise RuntimeError( "File %s defines systematic %s as using gamma with %s events in sideband, while a previous file has %s" % (fname,lsyst,pdfargs[0],otherargs[0]))
                 for b,v in systeffect.items(): othereffect[b] = v;
         else:
             pdfargs = [ str(x) for x in pdfargs ]
@@ -134,7 +134,7 @@ for ich,fname in enumerate(args):
         rateParamsOrder.update(DC.rateParamsOrder)
     # discrete nuisance
     for K in DC.discretes:
-        if discreteNuisances.has_key(K): raise RuntimeError, "Cannot currently correlate discrete nuisances across categories. Rename %s in one."%K
+        if discreteNuisances.has_key(K): raise RuntimeError( "Cannot currently correlate discrete nuisances across categories. Rename %s in one."%K)
         else: discreteNuisances[K] = True
     # put shapes, if available
     if len(DC.shapeMap):
