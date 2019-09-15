@@ -184,7 +184,7 @@ for ich,fname in enumerate(args):
         tmp_proc = editline[1]
         if tmp_chan == "*": # all channels
           tmp_chan = "%s(%s)"%(label,"|".join(c for c in DC.bins)) if len (DC.bins)>1 else label
-	else: tmp_chan = label+tmp_chan
+        else: tmp_chan = label+tmp_chan
         if tmp_proc == "*":
           tmp_proc = "(%s)"%("|".join(p for p in DC.processes))
         nuisanceEdits.append("%s %s %s %s"%(editline[0],tmp_proc,tmp_chan," ".join(editline[3])))
@@ -197,11 +197,11 @@ for (b,p,s) in keyline:
     else:
         if p not in backgrounds: backgrounds.append(p)
 
-print "Combination of", "  ".join(args)
-print "imax %d number of bins" % len(bins)
-print "jmax %d number of processes minus 1" % (len(signals) + len(backgrounds) - 1)
-print "kmax %d number of nuisance parameters" % (len(systlines) + len(paramSysts))
-print "-" * 130
+print( "Combination of", "  ".join(args))
+print( "imax %d number of bins" % len(bins))
+print( "jmax %d number of processes minus 1" % (len(signals) + len(backgrounds) - 1))
+print( "kmax %d number of nuisance parameters" % (len(systlines) + len(paramSysts)))
+print( "-" * 130)
 
 if shapeLines:
     chmax = max([max(len(p),len(c)) for p,c,x in shapeLines]);
