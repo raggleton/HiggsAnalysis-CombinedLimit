@@ -521,7 +521,7 @@ class ModelBuilder(ModelBuilderBase):
         groupsFor = {}
         #existingNuisanceNames = tuple(set([syst[0] for syst in self.DC.systs]+self.DC.flatParamNuisances.keys()+self.DC.rateParams.keys()+self.DC.extArgs.keys()+self.DC.discretes))
         existingNuisanceNames  = self.DC.getAllVariables()
-        for groupName,nuisanceNames in self.DC.groups.iteritems():
+        for groupName,nuisanceNames in self.DC.groups.items():
             for nuisanceName in nuisanceNames:
                 if nuisanceName not in existingNuisanceNames:
                     raise RuntimeError('Nuisance group "%(groupName)s" refers to nuisance "%(nuisanceName)s" but it does not exist. Perhaps you misspelled it.' % locals())
@@ -547,7 +547,7 @@ class ModelBuilder(ModelBuilderBase):
                         except: raise RuntimeError('Nuisance group "%(groupName)s" refers to nuisance but it is not an independant parameter.' % locals())
 
 
-        for groupName,nuisanceNames in self.DC.groups.iteritems():
+        for groupName,nuisanceNames in self.DC.groups.items():
             nuisanceargset = ROOT.RooArgSet()
             for nuisanceName in nuisanceNames:
                 nuisanceargset.add(self.out.var(nuisanceName))
@@ -645,7 +645,7 @@ class ModelBuilder(ModelBuilderBase):
     def doModelConfigs(self):
         if not self.options.bin: raise RuntimeException
         if self.options.out == None: raise RuntimeException
-        for nuis,warn in self.DC.flatParamNuisances.iteritems():
+        for nuis,warn in self.DC.flatParamNuisances.items():
             if self.out.var(nuis): self.out.var(nuis).setAttribute("flatParam")
             elif warn: stderr.write("Missing variable %s declared as flatParam, will create one!\n" % nuis)
         mc_s = ROOT.RooStats.ModelConfig("ModelConfig",       self.out)
