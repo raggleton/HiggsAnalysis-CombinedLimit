@@ -74,7 +74,7 @@ for ich,fname in enumerate(args):
     for (lsyst,nofloat,pdf,pdfargs,errline) in DC.systs:
         systeffect = {}
         if pdf == "param":
-            if paramSysts.has_key(lsyst):
+            if lsyst in paramSysts:
                if paramSysts[lsyst] != pdfargs: raise RuntimeError( "Parameter uncerainty %s mismatch between cards." % lsyst)
             else:
                 paramSysts[lsyst] = pdfargs
