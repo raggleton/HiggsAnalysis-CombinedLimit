@@ -208,16 +208,16 @@ if shapeLines:
     cfmt = "%-"+str(chmax)+"s ";
     shapeLines.sort( lambda x,y : cmp(x[0],y[0]) if x[1] == y[1] else cmp(x[1],y[1]) )
     for (process,channel,stuff) in shapeLines:
-        print "shapes", cfmt % process, cfmt % channel, ' '.join(stuff);
-    print "-" * 130
+        print( "shapes", cfmt % process, cfmt % channel, ' '.join(stuff));
+    print( "-" * 130)
 
 if obsline:
     cmax = max([cmax]+[len(l) for l in obskeyline]+[len(x) for x in obsline])
     cfmt = "%-"+str(cmax)+"s";
-    print "bin         ", "  ".join([cfmt % x for x in obskeyline])
-    print "observation ", "  ".join([cfmt % x for x in obsline])
+    print( "bin         ", "  ".join([cfmt % x for x in obskeyline]))
+    print( "observation ", "  ".join([cfmt % x for x in obsline]))
 
-print "-" * 130
+print( "-" * 130)
 
 pidline = []; signals = []; backgrounds = []
 tmpsignals = [];
@@ -234,12 +234,12 @@ for (b,p,s) in keyline:
 cmax = max([cmax]+[max(len(p),len(b)) for p,b,s in keyline]+[len(e) for e in expline])
 hmax = max([10] + [len("%-12s[nofloat]  %s %s" % (l,p,a)) for l,(p,a,e,nf) in systlines.items()])
 cfmt  = "%-"+str(cmax)+"s"; hfmt = "%-"+str(hmax)+"s  ";
-print hfmt % "bin",     "  ".join([cfmt % p for p,b,s in keyline])
-print hfmt % "process", "  ".join([cfmt % b for p,b,s in keyline])
-print hfmt % "process", "  ".join([cfmt % x for x in pidline])
-print hfmt % "rate",    "  ".join([cfmt % x for x in expline])
+print( hfmt % "bin",     "  ".join([cfmt % p for p,b,s in keyline]))
+print( hfmt % "process", "  ".join([cfmt % b for p,b,s in keyline]))
+print( hfmt % "process", "  ".join([cfmt % x for x in pidline]))
+print( hfmt % "rate",    "  ".join([cfmt % x for x in expline]))
 
-print "-" * 130
+print( "-" * 130)
 
 sysnamesSorted = systlines.keys(); sysnamesSorted.sort()
 for name in sysnamesSorted:
@@ -251,38 +251,38 @@ for name in sysnamesSorted:
             systline.append(effect[b][p])
         except KeyError:
             systline.append("-");
-    print hfmt % ("%-21s   %s  %s" % (name, pdf, " ".join(pdfargs))), "  ".join([cfmt % x for x in systline])
+    print( hfmt % ("%-21s   %s  %s" % (name, pdf, " ".join(pdfargs))), "  ".join([cfmt % x for x in systline]))
 for (pname, pargs) in paramSysts.items():
-    print "%-12s  param  %s" %  (pname, " ".join(pargs))
+    print( "%-12s  param  %s" %  (pname, " ".join(pargs)))
 
 for pname in flatParamNuisances.iterkeys():
-    print "%-12s  flatParam" % pname
+    print( "%-12s  flatParam" % pname)
 for pname in rateParams.iterkeys():
     for pk in range(len(rateParams[pname])):
-     print "%-12s  rateParam %s"% (rateParams[pname][pk][0][0],pname.replace("AND"," ")),
-     for p in rateParams[pname][pk][0][1:-1]: print p,
-     print rateParams[pname][pk][1],
-     print "\n",
+     print( "%-12s  rateParam %s"% (rateParams[pname][pk][0][0],pname.replace("AND"," "))),
+     for p in rateParams[pname][pk][0][1:-1]: print( p),
+     print( rateParams[pname][pk][1]),
+     print( "\n"),
 for dname in discreteNuisances.iterkeys():
-    print "%-12s  discrete" % dname
+    print( "%-12s  discrete" % dname)
 for ext in extArgs.iterkeys():
-    print "%s" % ' '.join(extArgs[ext])
+    print( "%s" % ' '.join(extArgs[ext]))
 for groupName,nuisanceNames in groups.iteritems():
     nuisances = ' '.join(nuisanceNames)
-    print '%(groupName)s group = %(nuisances)s' % locals()
+    print( '%(groupName)s group = %(nuisances)s' % locals())
 for bpf in binParFlags.iterkeys():
     if len(binParFlags[bpf]) == 1:
-      print "%s autoMCStats %g" % (bpf,binParFlags[bpf][0])
+      print( "%s autoMCStats %g" % (bpf,binParFlags[bpf][0]))
     if len(binParFlags[bpf]) == 2:
-      print "%s autoMCStats %g %i" % (bpf,binParFlags[bpf][0], binParFlags[bpf][1])
+      print( "%s autoMCStats %g %i" % (bpf,binParFlags[bpf][0], binParFlags[bpf][1]))
     if len(binParFlags[bpf]) == 3:
-      print "%s autoMCStats %g %i %i" % (bpf,binParFlags[bpf][0], binParFlags[bpf][1], binParFlags[bpf][2])
+      print( "%s autoMCStats %g %i %i" % (bpf,binParFlags[bpf][0], binParFlags[bpf][1], binParFlags[bpf][2]))
 
 nuisanceEdits = set(nuisanceEdits)
 for edit in nuisanceEdits:
-    print "nuisance edit ", edit
+    print( "nuisance edit ", edit)
 
 if options.editNuisFile:
     file = open(options.editNuisFile, "r")
     str = file.read();
-    print str
+    print( str)
