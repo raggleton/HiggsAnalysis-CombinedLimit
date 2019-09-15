@@ -388,7 +388,7 @@ class ShapeBuilder(ModelBuilder):
             if self.options.verbose > 1: stderr.write("Observables: %s\n" % str(shapeObs.keys()))
             if len(shapeObs.keys()) != 1:
                 raise RuntimeError("There's more than once choice of observables: %s\n" % str(shapeObs.keys()))
-            self.out.binVars = shapeObs.values()[0]
+            self.out.binVars = list(shapeObs.values())[0]
             self.out._import(self.out.binVars)
     def doCombinedDataset(self):
         if len(self.DC.bins) == 1 and self.options.forceNonSimPdf:
