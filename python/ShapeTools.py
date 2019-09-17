@@ -315,6 +315,7 @@ class ShapeBuilder(ModelBuilder):
                         for i in xrange(1, shape.GetNbinsX()+1):
                             if shape.GetBinContent(i) > 0: bgbins[i] = True
                 elif shape.InheritsFrom("RooDataHist"):
+                    shape.setDefaultStorageType(0) 
                     shapeTypes.append("RooDataHist"); 
                     #if doPadding: shapeBins[b] = shape.numEntries() --> Not clear this is needed at all for RooDataHists so just ignore
                     shapeObs[self.argSetToString(shape.get())] = shape.get()
@@ -325,6 +326,7 @@ class ShapeBuilder(ModelBuilder):
                         else:
                             self.pdfModes[b] = 'binned'
                 elif shape.InheritsFrom("RooDataSet"):
+                    shape.setDefaultStorageType(0)
                     shapeTypes.append("RooDataSet"); 
                     shapeObs[self.argSetToString(shape.get())] = shape.get()
                     norm = shape.sumEntries()
@@ -763,6 +765,7 @@ class ShapeBuilder(ModelBuilder):
                 #self.out._import(rdh)
                 _cache[shape.GetName()] = rdh
             elif shape.ClassName() in ["RooDataHist", "RooDataSet"]:
+                shape.setDefaultStorageType(0)
                 return shape
             else: raise RuntimeError("shape2Data not implemented for %s" % shape.ClassName())
         return _cache[shape.GetName()]
