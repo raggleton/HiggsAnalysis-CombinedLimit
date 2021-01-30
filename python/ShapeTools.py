@@ -1,4 +1,5 @@
 from __future__ import print_function
+from past.builtins import xrange
 from sys import stdout, stderr
 import os.path
 import ROOT
@@ -282,7 +283,7 @@ class ShapeBuilder(ModelBuilder):
         for ib,b in enumerate(self.DC.bins):
             databins = {}; bgbins = {}
             channelBinParFlag = b in self.DC.binParFlags.keys()
-            for p in [self.options.dataname]+self.DC.exp[b].keys():
+            for p in [self.options.dataname]+list(self.DC.exp[b].keys()):
                 if len(self.DC.obs) == 0 and p == self.options.dataname: continue
                 if p != self.options.dataname and self.DC.exp[b][p] == 0: continue
                 shape = self.getShape(b,p); norm = 0;
@@ -314,6 +315,7 @@ class ShapeBuilder(ModelBuilder):
                         for i in xrange(1, shape.GetNbinsX()+1):
                             if shape.GetBinContent(i) > 0: bgbins[i] = True
                 elif shape.InheritsFrom("RooDataHist"):
+                    shape.setDefaultStorageType(0) 
                     shapeTypes.append("RooDataHist"); 
                     #if doPadding: shapeBins[b] = shape.numEntries() --> Not clear this is needed at all for RooDataHists so just ignore
                     shapeObs[self.argSetToString(shape.get())] = shape.get()
@@ -324,6 +326,7 @@ class ShapeBuilder(ModelBuilder):
                         else:
                             self.pdfModes[b] = 'binned'
                 elif shape.InheritsFrom("RooDataSet"):
+                    shape.setDefaultStorageType(0)
                     shapeTypes.append("RooDataSet"); 
                     shapeObs[self.argSetToString(shape.get())] = shape.get()
                     norm = shape.sumEntries()
@@ -388,7 +391,7 @@ class ShapeBuilder(ModelBuilder):
             if self.options.verbose > 1: stderr.write("Observables: %s\n" % str(shapeObs.keys()))
             if len(shapeObs.keys()) != 1:
                 raise RuntimeError("There's more than once choice of observables: %s\n" % str(shapeObs.keys()))
-            self.out.binVars = shapeObs.values()[0]
+            self.out.binVars = list(shapeObs.values())[0]
             self.out._import(self.out.binVars)
     def doCombinedDataset(self):
         if len(self.DC.bins) == 1 and self.options.forceNonSimPdf:
@@ -476,7 +479,7 @@ class ShapeBuilder(ModelBuilder):
                     if allowNoSyst: return None
                     raise RuntimeError("Object %s in workspace %s in file %s does not exist or it's neither a data nor a pdf" % (oname, wname, finalNames[0]))
                 # Fix the fact that more than one entry can refer to the same object
-                ret = ret.Clone()
+                ret = ret.Clone("newname")
                 ret.SetName("shape%s_%s_%s%s" % (postFix,process,channel, "_"+syst if syst else ""))
                 _cache[(channel,process,syst)] = ret
                 if not syst:
@@ -762,6 +765,7 @@ class ShapeBuilder(ModelBuilder):
                 #self.out._import(rdh)
                 _cache[shape.GetName()] = rdh
             elif shape.ClassName() in ["RooDataHist", "RooDataSet"]:
+                shape.setDefaultStorageType(0)
                 return shape
             else: raise RuntimeError("shape2Data not implemented for %s" % shape.ClassName())
         return _cache[shape.GetName()]
